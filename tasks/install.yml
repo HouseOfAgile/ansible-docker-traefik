@@ -1,0 +1,84 @@
+
+- name: Set Ownership for depl user on specific directory for traefik
+  file:
+    path: "{{ item }}"
+    owner: "{{ depl_user }}"
+    group: "{{ depl_group }}"
+    # to check if group exist
+    mode: 0764
+    state: directory
+  with_items:
+    - "{{ traefik_install_dir }}"
+    - "{{ traefik_install_dir }}/{{ traefik_config.service_directory }}"
+  tags:
+    - preparation
+
+- name: Ensure certificate file exists is got proper permission
+  copy:
+    content: ""
+    dest: "{{ traefik_install_dir }}/{{ traefik_config.certificates.storage }}"
+    force: no
+    owner: "{{ depl_user }}"
+    group: "{{ depl_group }}"
+    mode: 0600
+  tags:
+    - preparation
+
+- name: Generate Traefik docker-compose
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ traefik_install_dir }}/docker-compose.yml"
+    owner: "{{ depl_user }}"
+    group: "{{ depl_group }}"
+    mode: 0644
+  notify:
+    - recreate traefik container
+
+- name: Generate Traefik main Config
+  template:
+    src: conf.toml.j2
+    dest: "{{ traefik_install_dir }}/{{ traefik_config.config_filename }}"
+    owner: "{{ depl_user }}"
+    group: "{{ depl_group }}"
+    mode: 0644
+
+- name: Generate Traefik Config for main services
+  template:
+    src: service.toml.j2
+    dest: "{{ traefik_install_dir }}/{{ traefik_config.service_directory }}/{{ item['name'] }}.toml"
+    owner: "{{ depl_user }}"
+    group: "{{ depl_group }}"
+    mode: 0644
+  vars:
+    service: "{{ item['name'] }}"
+    backends: "{{ item['backends'] }}"
+    frontends: "{{ item['frontends'] }}"
+  with_items:
+    - "{{ traefik_services }}"
+  tags: update-conf
+  notify:
+    - recreate traefik container
+
+- name: Generate Traefik Config for dev services
+  template:
+    src: dev-service.toml.j2
+    dest: "{{ traefik_install_dir }}/{{ traefik_config.service_directory }}/dev_{{ item['name'] }}.toml"
+    owner: "{{ depl_user }}"
+    group: "{{ depl_group }}"
+    mode: 0644
+  vars:
+    service: "{{ item['name'] }}"
+    url: "{{ item['url'] }}"
+    route: "{{ item['route'] }}"
+  with_items:
+    - "{{ dev_traefik_services }}"
+  tags: update-conf
+  notify:
+    - recreate traefik container
+
+- name: Show traefik config details for dev services
+  debug: 
+    msg: "Created {{ item['name'] }} on route {{ item['route'] }} pointing to {{ item['url'] }}"
+  with_items:
+    - "{{ dev_traefik_services }}"
+  tags: update-conf

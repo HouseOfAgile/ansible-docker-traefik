@@ -1,0 +1,31 @@
+all:
+  hosts:
+    some_server:
+      ansible_host: some-server
+      ansible_user: hoauser
+
+  children:
+    traefik:
+      hosts:
+        some_server:
+          ansible_user: hoauser
+          traefik_config:
+            http_port: "18080"
+            logs:
+              root: "/tmp/"
+            certificates:
+              email: "jc+{{ inventory_hostname }}@example.com"
+          traefik_services:
+            - name: some_docker_service
+              backends:
+                servers:
+                  some_docker_service:
+                    url: http://172.18.0.2:8080
+              frontends:
+                servers:
+                  some_docker_service:
+                    backend: some_docker_service
+                    pass_host_header: yes
+                    routes:
+                      test0:
+                        rule: "Host:some-docker-service.example.com"

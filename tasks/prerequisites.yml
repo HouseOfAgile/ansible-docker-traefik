@@ -1,0 +1,5 @@
+- name: be sure docker is running and enabled
+  service:
+    name: docker
+    state: started
+  tags: traefik

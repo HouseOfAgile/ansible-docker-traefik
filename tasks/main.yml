@@ -1,0 +1,4 @@
+---
+# tasks file for ansible-traefik
+- import_tasks: prerequisites.yml
+- import_tasks: install.yml

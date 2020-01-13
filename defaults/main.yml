@@ -1,0 +1,77 @@
+---
+# defaults file for ansible-traefik
+depl_user: hoauser
+depl_group: docker
+
+traefik_docker_image: "traefik"
+traefik_image_version: "1.7.0-alpine"
+traefik_container_name: "traefik_proxy"
+traefik_docker_network: "hoa_network"
+traefik_install_dir: "/opt/{{ inventory_hostname }}/traefik"
+
+traefik_config:
+  install_directory:
+  config_filename: "traefik.toml"
+  docker_domain: "example.com"
+  service_directory: "hoa-services"
+  debug_mode: "false"
+  log_level: "ERROR"
+  http_port: "18080"
+  web_user: "admin"
+  web_pass: "$mar1$ohsuXhSP$QSNm2Xk9o3WN1d7v8oUOH1"
+  logs:
+    root: "/var/log/"
+    app: "traefik_app.log"
+    access: "traefik_access.log"
+  idle_timeout: "45s"
+  max_idle_conns_per_host: 200
+  certificates:
+    email: "jc+{{ inventory_hostname }}@example.com"
+    storage: "certs_{{ inventory_hostname }}.json"
+
+traefik_services: []
+  # - name: example
+  #   backends:
+  #     servers:
+  #       gloubi:
+  #         url: http://172.17.0.2:80
+  #       boulga:
+  #         url: http://172.17.0.3:80
+  #   frontends:
+  #     servers:
+  #       frontgloubi:
+  #         backend: gloubi
+  #         pass_host_header: no
+  #         routes:
+  #           test0:
+  #             rule: "Host:gloubi.localhost"
+  #       frontboulga:
+  #         backend: boulga
+  #         pass_host_header: yes
+  #         routes:
+  #           test1:
+  #             rule: "Host:boulga.localhost"
+  #           test2:
+  #             rule: "Path:/test"
+  # - name: example2
+  #   backends:
+  #     servers:
+  #       gloubi:
+  #         url: http://172.17.0.6:80
+  #       boulga:
+  #         url: http://172.17.0.7:8800
+  #   frontends:
+  #     servers:
+  #       frontgloubi:
+  #         backend: blabla
+  #         pass_host_header: yes
+  #         routes:
+  #           test1:
+  #             rule: "Host: blabla.localhost"
+  #           test2:
+  #             rule: "Path:/test"
+
+dev_traefik_services: []
+  # - name: example
+  #   route: someurl.example.com
+  #   url: http://172.17.0.2:80

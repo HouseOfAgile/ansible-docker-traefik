@@ -1,0 +1,33 @@
+---
+# handlers file for ansible-traefik
+- name: remove traefik container
+  docker_container:
+    image: "{{ traefik_docker_image }}"
+    name: "{{ traefik_container_name }}"
+    state: absent
+    purge_networks: yes
+
+- name: create traefik docker network
+  docker_network:
+    name: "{{ traefik_docker_network }}"
+    appends: yes
+
+- name: create traefik container
+  docker_compose:
+    project_src: "{{ traefik_install_dir }}"
+    restarted: true
+
+- name: recreate traefik container
+  debug:
+    msg: "Recreating traefik"
+  changed_when: True
+  notify:
+    - remove traefik container
+    - create traefik docker network
+    - create traefik container
+
+- name: remove traefik image
+  docker_image:
+    path: "{{ traefik_install_dir }}"
+    name: "{{ traefik_container_name }}"
+    state: absent

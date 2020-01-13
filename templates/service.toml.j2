@@ -1,0 +1,23 @@
+[backends]
+[backends.{{ service }}]
+{% for server in backends.servers %}
+{% set _server = backends.servers[server] %}
+[backends.{{ service }}.servers.{{ server }}]
+url = "{{ _server['url'] }}"
+{% endfor %}
+
+[frontends]
+{% for server in frontends.servers %}
+{% set _server = frontends.servers[server] %}
+[frontends.{{ server }}]
+entryPoints = ["http", "https"]
+backend = "{{ _server['backend'] }}"
+{% if _server['pass_host_header'] is defined and _server['pass_host_header'] %}
+passHostHeader = true
+{% endif %}
+{% for route in _server['routes'] %}
+{% set _route = _server['routes'][route] %}
+[frontends.{{ server }}.routes.{{ route }}]
+rule = "{{ _route['rule'] }}"
+{% endfor %}
+{% endfor %}
