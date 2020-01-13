@@ -33,7 +33,7 @@ Example:
 ```
 all:
   hosts:
-    berliner:
+    some_server:
       ansible_host: some-server
       ansible_user: hoauser
 
@@ -41,7 +41,7 @@ all:
     traefik:
       hosts:
         # localhost:
-        berliner:
+        some_server:
           ansible_user: hoauser
           traefik_config:
             http_port: "18080"
