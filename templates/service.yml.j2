@@ -4,7 +4,7 @@ http:
 {% set _server = frontends.servers[server] %}
 {% for route in _server['routes'] %}
 {% set _route = _server['routes'][route] %}
-    router0:
+    router_{{ service }}:
       rule: "{{ _route['rule'] }}"
       service: {{ service }}
       middlewares:
