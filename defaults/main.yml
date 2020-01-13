@@ -4,14 +4,14 @@ depl_user: hoauser
 depl_group: docker
 
 traefik_docker_image: "traefik"
-traefik_image_version: "1.7.0-alpine"
+traefik_image_version: "2.1.2"
 traefik_container_name: "traefik_proxy"
 traefik_docker_network: "hoa_network"
 traefik_install_dir: "/opt/{{ inventory_hostname }}/traefik"
 
 traefik_config:
   install_directory:
-  config_filename: "traefik.toml"
+  config_filename: "traefik.yml"
   docker_domain: "example.com"
   service_directory: "hoa-services"
   debug_mode: "false"

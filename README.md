@@ -12,8 +12,9 @@ Depending on configuration you could either use static definition throught ansib
 Versions
 ------------
 
-This version is based on toml files for configuration and work on the 1.7 legacy version of traefik.
+This playbook is working with latest traefik version 2, and use yaml file for configuration (see [traefik migration v1 to v2](https://docs.traefik.io/migration/v1-to-v2/)).
 
+If you want to use an old traefik version you can check the [traefik-v1.7](https://github.com/HouseOfAgile/ansible-docker-traefik/tree/traefik-v1.7) branch version
 
 Requirements
 ------------
@@ -62,8 +63,9 @@ all:
                     pass_host_header: yes
                     routes:
                       test0:
-                        rule: "Host:some-docker-service.example.com"
+                        rule: "Host(`some-docker-service.example.com`)"
 ```
+
 Configuration is merged with the default [role variables](./defaults/main.yml), see [ansible config](./ansible.cfg) file.
 
 Here we will deploy traefik through docker on **some_server**, there will be one service **some_docker_service**.

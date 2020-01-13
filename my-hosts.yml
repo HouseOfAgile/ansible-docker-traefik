@@ -28,4 +28,4 @@ all:
                     pass_host_header: yes
                     routes:
                       test0:
-                        rule: "Host:some-docker-service.example.com"
+                        rule: "Host(`some-docker-service.example.com`)"

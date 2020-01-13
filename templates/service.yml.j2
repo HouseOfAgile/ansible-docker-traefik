@@ -1,0 +1,31 @@
+http:
+  routers:
+{% for server in frontends.servers %}
+{% set _server = frontends.servers[server] %}
+{% for route in _server['routes'] %}
+{% set _route = _server['routes'][route] %}
+    router0:
+      rule: "{{ _route['rule'] }}"
+      service: {{ service }}
+      middlewares:
+        - https-only
+      # we use default tls for now
+      tls:
+        certResolver: default
+        
+{% endfor %}
+{% endfor %}
+  services:
+    {{ service }}:
+      loadBalancer:
+        servers:    
+{% for server in backends.servers %}
+{% set _server = backends.servers[server] %}
+          - url: "{{ _server['url'] }}"
+{% endfor %}
+
+http:
+  middlewares:
+    https-only:
+      redirectScheme:
+        scheme: https

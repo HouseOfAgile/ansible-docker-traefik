@@ -12,7 +12,7 @@
     name: "{{ traefik_docker_network }}"
     appends: yes
 
-- name: create traefik container
+- name: start traefik through docker compose
   docker_compose:
     project_src: "{{ traefik_install_dir }}"
     restarted: true
@@ -24,7 +24,7 @@
   notify:
     - remove traefik container
     - create traefik docker network
-    - create traefik container
+    - start traefik through docker compose
 
 - name: remove traefik image
   docker_image:

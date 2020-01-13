@@ -1,25 +1,29 @@
 version: '3'
 
 services:
-  proxy:
+  traefik-proxy:
     image: {{ traefik_docker_image }}:{{ traefik_image_version }}
+    container_name: hoa-traefik-proxy
     restart: always
-    command: --configfile=/{{ traefik_config.config_filename }} --file.directory=/{{ traefik_config.service_directory }} --file --acme.storage=/{{ traefik_config.certificates.storage }}
+    command: --configfile=/{{ traefik_config.config_filename }} --acme.storage=/{{ traefik_config.certificates.storage }}
+{% if traefik_docker_network %}
     networks:
       - {{ traefik_docker_network }}
+{% endif %}
     ports:
       - "80:80"
       - "443:443"
       - "{{ traefik_config.http_port }}:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
       - {{ traefik_install_dir }}/{{ traefik_config.config_filename }}:/{{ traefik_config.config_filename }}
       - {{ traefik_install_dir }}/{{ traefik_config.certificates.storage }}:/{{ traefik_config.certificates.storage }}
       - {{ traefik_install_dir }}/{{ traefik_config.service_directory }}:/{{ traefik_config.service_directory }}
-{% if dev_traefik_services is defined %}
-      - {{ traefik_install_dir }}/dev_services.crt:/dev_services.crt
-      - {{ traefik_install_dir }}/dev_services.key:/dev_services.key
-{% endif %}
+
+{% if traefik_docker_network %}
 networks:
   {{ traefik_docker_network }}:
     external: true
+{% endif %}

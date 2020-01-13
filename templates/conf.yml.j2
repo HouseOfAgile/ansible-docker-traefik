@@ -1,0 +1,65 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+# static configuration
+log:
+  level: DEBUG
+  filePath: "{{ traefik_config.logs.root }}{{ traefik_config.logs.app }}"
+  # format: json
+
+# Configuring a buffer of 100 lines
+accessLog:
+  filePath: "{{ traefik_config.logs.root }}{{ traefik_config.logs.access }}"
+  bufferingSize: 100
+
+serversTransport:
+  maxIdleConnsPerHost: {{ traefik_config.max_idle_conns_per_host }}
+
+providers:
+  providersThrottleDuration: 42
+      
+entryPoints:
+  web:
+    address: ":80"
+
+  web-secure:
+    address: ":443"
+
+certificatesResolvers:
+  default:
+    acme:
+      email: {{ traefik_config.certificates.email }}
+      storage: {{ traefik_config.certificates.storage }}
+      httpChallenge:
+        # used during the challenge we used to use http
+        entryPoint: web  
+
+
+providers:
+  providersThrottleDuration: 2s
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    watch: true
+
+  file:
+    directory: "{{ traefik_config.service_directory }}/"
+    watch: true
+
+api:
+  insecure: true
+  debug: true
+  dashboard: true
+
+http:
+  middlewares:
+    https-only:
+      redirectScheme:
+        scheme: https
+  routers:
+    https-redirect:
+      entrypoints: 'web'
+      rule: "HostRegexp(`{any:.*}`)"
+      middlewares: 'https-only'
+      
