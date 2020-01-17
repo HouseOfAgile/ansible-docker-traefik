@@ -4,7 +4,7 @@ global:
 
 # static configuration
 log:
-  level: DEBUG
+  level: {{ traefik_config.log_level }}
   filePath: "{{ traefik_config.logs.root }}{{ traefik_config.logs.app }}"
   # format: json
 
@@ -60,6 +60,8 @@ http:
   routers:
     https-redirect:
       entrypoints: 'web'
-      rule: "HostRegexp(`{any:.*}`)"
+#      rule: "HostRegexp(`{any:.*}`)"
+      rule: "HostRegexp(`{host:.+}`)"
+#      rule: "hostregexp(`{host:.+}`)"
       middlewares: 'https-only'
       
