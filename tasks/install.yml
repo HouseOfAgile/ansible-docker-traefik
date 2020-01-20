@@ -40,6 +40,18 @@
     owner: '{{ depl_user }}'
     group: '{{ depl_group }}'
     mode: 0644
+  notify:
+    - recreate traefik container
+
+- name: Generate YML global redirect
+  template:
+    src: global-redirect.yml.j2
+    dest: "{{ traefik_install_dir }}/{{ traefik_config.service_directory }}/global-redirect.yml"
+    owner: '{{ depl_user }}'
+    group: '{{ depl_group }}'
+    mode: 0644
+  notify:
+    - recreate traefik container
 
 - name: Generate Traefik Config for main services
   template:

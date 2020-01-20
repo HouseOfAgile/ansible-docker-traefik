@@ -1,0 +1,21 @@
+http:
+  middlewares:
+    global-redirect:
+      redirectScheme:
+        scheme: https
+  
+  routers:
+    global-redirect:
+      rule: "HostRegexp(`{host:.+}`)"
+      entryPoints:
+      - web
+      middlewares:
+      - global-redirect
+      service: "noop"
+
+  services:
+    # dummy noop service
+    noop:
+      loadBalancer:
+        servers:
+        - url: "http://127.0.0.1"

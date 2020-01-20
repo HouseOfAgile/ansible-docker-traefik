@@ -8,7 +8,7 @@ http:
       rule: "{{ _route['rule'] }}"
       service: {{ service }}
       middlewares:
-        - https-only
+        - global-redirect
       # we use default tls for now
       tls:
         certResolver: default
@@ -24,9 +24,4 @@ http:
           - url: "{{ _server['url'] }}"
 {% endfor %}
 
-http:
-  middlewares:
-    https-only:
-      redirectScheme:
-        scheme: https
 

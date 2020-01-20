@@ -47,21 +47,11 @@ providers:
     directory: "{{ traefik_config.service_directory }}/"
     watch: true
 
+{% if traefik_config.api_enabled %}
 api:
   insecure: true
   debug: true
   dashboard: true
+{% endif %}
 
-http:
-  middlewares:
-    https-only:
-      redirectScheme:
-        scheme: https
-  routers:
-    https-redirect:
-      entrypoints: 'web'
-#      rule: "HostRegexp(`{any:.*}`)"
-      rule: "HostRegexp(`{host:.+}`)"
-#      rule: "hostregexp(`{host:.+}`)"
-      middlewares: 'https-only'
       
