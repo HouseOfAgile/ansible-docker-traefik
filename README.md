@@ -16,12 +16,22 @@ This playbook is working with latest traefik version 2, and use yaml file for co
 
 If you want to use an old traefik version you can check the [traefik-v1.7](https://github.com/HouseOfAgile/ansible-docker-traefik/tree/traefik-v1.7) branch version
 
+Principles
+------------
+
+In order to have an efficient reverse proxy with ssl encryptions, traefik is a great solution, this playbook ease the maintenance of your services and traefik definitions. 
+
+This traefik installation is by default supposed to work with docker (and you can disbale it), so if you set your labels properly on your docker containers, they should be taken into account by traefik. 
+You can also work with static definition, as long as you are within the same network, you should have your services properly mapped with ssl encryption.
+
+By default, there is a global middleware to reirect traefik from http to https, this part from traefik is a bit hacky and should evolve in the future, as many discussions are ongoing on how to do it properly.
+
 Requirements
 ------------
 
-docker-ce
-pip install docker
-pip install docker-compose
+    docker-ce
+    pip install docker
+    pip install docker-compose
 
 Role Variables
 --------------
@@ -93,7 +103,7 @@ Development
 
 ### self signed dev certificates
 
-You can work with selfsigned certifcates, you will have to generate them and place them in the root of your playbook.
+You can work with self signed certifcates, you will have to generate them and place them in the root of your playbook.
 
 License
 -------
