@@ -28,6 +28,7 @@ traefik_config:
   certificates:
     email: "jc+{{ inventory_hostname }}@example.com"
     storage: "certs_{{ inventory_hostname }}.json"
+  # enable the dashboard, might be a bit insecure
   api_enabled: false
 
 traefik_services: []
