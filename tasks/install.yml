@@ -2,6 +2,8 @@
   stat:
     path: "{{ traefik_install_dir }}/{{ traefik_config.service_directory }}"
   register: service_directory_stat
+  tags:
+   - "clean-static-conf"
 
 - name: Delete directory
   file:

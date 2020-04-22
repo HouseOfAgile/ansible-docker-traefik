@@ -82,6 +82,12 @@ Here we will deploy traefik through docker on **some_server**, there will be one
 Here we have one service called **some_docker_service** running possibly through docker, with the internal IP 172.18.0.2. 
 We override some global variables, for example the logs *root* path, so that logs are available in **/tmp/**
 
+In case you want to reset the static services directory use the tag clean-static-conf:
+
+    ansible-playbook setup-traefik.yml -i my-hosts.yml --tags "clean-static-conf"
+
+Then run the playbook as usual.
+
 Dependencies
 ------------
 
