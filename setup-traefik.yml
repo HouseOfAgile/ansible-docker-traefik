@@ -1,4 +1,4 @@
 - hosts: traefik
   name: configure traefik
   roles:
-    - ansible-docker-traefik
+    - { role: ansible-docker-traefik }

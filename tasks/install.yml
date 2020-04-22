@@ -1,3 +1,27 @@
+- name: Register service_directory stat
+  stat:
+    path: "{{ traefik_install_dir }}/{{ traefik_config.service_directory }}"
+  register: service_directory_stat
+
+- name: Delete directory
+  file:
+    path: "{{ traefik_install_dir }}/{{ traefik_config.service_directory }}"
+    state: absent
+  tags:
+   - "never"
+   - "clean-static-conf"
+
+- name: Create directory
+  file:
+    path: "{{ traefik_install_dir }}/{{ traefik_config.service_directory }}"
+    state: directory
+    owner: "{{ service_directory_stat.stat.pw_name }}"
+    group: "{{ service_directory_stat.stat.gr_name }}"
+    mode: "{{ service_directory_stat.stat.mode }}"
+  tags:
+   - "never"
+   - "clean-static-conf"
+
 - name: Set Ownership for depl user on specific directory for traefik
   file:
     path: "{{ item }}"
@@ -19,7 +43,7 @@
     force: no
     owner: "{{ depl_user }}"
     group: "{{ depl_group }}"
-    mode: 0600
+    mode: "0600"
   tags:
     - preparation
 
