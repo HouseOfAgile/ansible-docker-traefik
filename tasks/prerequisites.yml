@@ -1,3 +1,9 @@
+- name: Install docker and docker-compose pip package
+  pip:
+    name: 
+      - docker
+      - docker-compose
+
 - name: be sure docker is running and enabled
   service:
     name: docker
