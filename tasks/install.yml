@@ -90,8 +90,8 @@
     service: "{{ item['name'] }}"
     backends: "{{ item['backends'] }}"
     frontends: "{{ item['frontends'] }}"
-  with_items:
-    - "{{ traefik_services }}"
+  loop: "{{ traefik_services if traefik_services is iterable and traefik_services is not string else [] }}"
+
   tags: update-conf
   notify:
     - recreate traefik container

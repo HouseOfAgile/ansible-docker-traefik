@@ -16,9 +16,6 @@ accessLog:
 serversTransport:
   maxIdleConnsPerHost: {{ traefik_config.max_idle_conns_per_host }}
 
-providers:
-  providersThrottleDuration: 42
-      
 entryPoints:
   web:
     address: ":80"
@@ -37,7 +34,7 @@ certificatesResolvers:
 
 
 providers:
-  providersThrottleDuration: 2s
+  providersThrottleDuration: 10s
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
