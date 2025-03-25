@@ -45,7 +45,7 @@
     force: no
     owner: "{{ depl_user }}"
     group: "{{ depl_group }}"
-    mode: "0600"
+    mode: 0600
   tags:
     - preparation
 

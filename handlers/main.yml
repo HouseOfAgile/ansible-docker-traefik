@@ -5,7 +5,11 @@
     image: "{{ traefik_docker_image }}"
     name: "{{ traefik_container_name }}"
     state: absent
-    purge_networks: yes
+
+- name: remove traefik docker network
+  docker_network:
+    name: "{{ traefik_docker_network }}"
+    state: absent
 
 - name: create traefik docker network
   docker_network:
@@ -13,9 +17,11 @@
     appends: yes
 
 - name: start traefik through docker compose
-  docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ traefik_install_dir }}"
-    restarted: true
+    state: present
+    pull: always
+    recreate: always
 
 - name: recreate traefik container
   debug:

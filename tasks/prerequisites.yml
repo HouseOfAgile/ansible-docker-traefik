@@ -1,6 +1,6 @@
 - name: Install docker and docker-compose pip package
   pip:
-    name: 
+    name:
       - docker
       - docker-compose
 

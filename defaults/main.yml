@@ -4,7 +4,7 @@ depl_user: hoauser
 depl_group: docker
 
 traefik_docker_image: "traefik"
-traefik_image_version: "2.9.4"
+traefik_image_version: "2.11.21"
 traefik_container_name: "traefik_proxy"
 traefik_docker_network: "hoa_network"
 traefik_install_dir: "/opt/{{ inventory_hostname }}/traefik"
@@ -31,7 +31,8 @@ traefik_config:
   # enable the dashboard, might be a bit insecure
   api_enabled: false
 
-traefik_services: []
+traefik_services:
+  []
   # - name: example
   #   backends:
   #     servers:
@@ -73,7 +74,8 @@ traefik_services: []
   #           test2:
   #             rule: "Path:/test"
 
-dev_traefik_services: []
+dev_traefik_services:
+  []
   # - name: example
   #   route: someurl.example.com
   #   url: http://172.17.0.2:80
