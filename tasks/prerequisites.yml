@@ -1,11 +1,16 @@
-- name: Install docker and docker-compose pip package
-  pip:
+- name: Install docker python system packages
+  apt:
     name:
-      - docker
-      - docker-compose
+      - python3-docker
+    state: present
+    update_cache: yes
+  become: true
 
-- name: be sure docker is running and enabled
+- name: Ensure docker is running and enabled
   service:
     name: docker
     state: started
-  tags: traefik
+    enabled: yes
+  become: true
+  tags: traefik  
+
